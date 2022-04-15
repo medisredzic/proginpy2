@@ -9,6 +9,7 @@ import glob
 from PIL import Image, ImageStat
 import numpy as np
 import hashlib
+import shutil
 
 
 def write_log(log_file: str, filename: str, errornum: int):
@@ -17,9 +18,10 @@ def write_log(log_file: str, filename: str, errornum: int):
 
 
 def validate_images(input_dir: str,output_dir: str,log_file: str,formatter: str = ''):
-    current_image = 1
+    current_image = 0
     copied_images = []
     abs_path = os.path.abspath(input_dir)
+    #input_dir_sorted = sorted(glob.glob(os.path.join(input_dir, '**', '*.jpg'), recursive=True))
     input_dir_sorted = sorted([log for log in glob.glob(pathname=abs_path + '/**/*', recursive=True) if not os.path.isdir(log)])
 
     if not os.path.exists(output_dir):
@@ -75,7 +77,9 @@ def validate_images(input_dir: str,output_dir: str,log_file: str,formatter: str 
                     continue
 
                 copied_images.append(hash_img)
-                pil_img.save(fp=os.path.join(output_dir, img_name))
+                #pil_img.save(fp=os.path.join(output_dir, img_name))
+                #print(os.path.join(output_dir))
+                shutil.copy(img, os.path.join(output_dir, img_name))
                 current_image += 1
 
         except OSError:
